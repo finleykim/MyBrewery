@@ -11,10 +11,11 @@
 		C5F7AAFB285A00A70056E5DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */; };
 		C5F7AAFD285A00A70056E5DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */; };
 		C5F7AAFF285A00A70056E5DF /* BeerListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFE285A00A70056E5DF /* BeerListController.swift */; };
-		C5F7AB02285A00A70056E5DF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB00285A00A70056E5DF /* Main.storyboard */; };
 		C5F7AB04285A00A90056E5DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB03285A00A90056E5DF /* Assets.xcassets */; };
 		C5F7AB07285A00A90056E5DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB05285A00A90056E5DF /* LaunchScreen.storyboard */; };
-		C5F7AB0F285A00CD0056E5DF /* Beer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AB0E285A00CD0056E5DF /* Beer.swift */; };
+		C5F7AB11285A04EF0056E5DF /* Beer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AB10285A04EF0056E5DF /* Beer.swift */; };
+		C5F7AB13285A05710056E5DF /* yellowwave.json in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB12285A05710056E5DF /* yellowwave.json */; };
+		C5F7AB15285A0F4A0056E5DF /* seawaves.json in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB14285A0F4A0056E5DF /* seawaves.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -25,11 +26,12 @@
 		C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		C5F7AAFE285A00A70056E5DF /* BeerListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListController.swift; sourceTree = "<group>"; };
-		C5F7AB01285A00A70056E5DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C5F7AB03285A00A90056E5DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C5F7AB06285A00A90056E5DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C5F7AB08285A00A90056E5DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C5F7AB0E285A00CD0056E5DF /* Beer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Beer.swift; path = "../../MyBreweryㅇ/Mybrewery/Beer.swift"; sourceTree = "<group>"; };
+		C5F7AB10285A04EF0056E5DF /* Beer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Beer.swift; path = ../../../../Beer.swift; sourceTree = "<group>"; };
+		C5F7AB12285A05710056E5DF /* yellowwave.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = yellowwave.json; sourceTree = SOURCE_ROOT; };
+		C5F7AB14285A0F4A0056E5DF /* seawaves.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = seawaves.json; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +60,6 @@
 				21CAD3D1DEE8B9CDB764623C /* Pods-MyBrewery.debug.xcconfig */,
 				C550893A2F914B35BAAB4D42 /* Pods-MyBrewery.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -86,10 +87,11 @@
 				C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */,
 				C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */,
 				C5F7AAFE285A00A70056E5DF /* BeerListController.swift */,
-				C5F7AB0E285A00CD0056E5DF /* Beer.swift */,
-				C5F7AB00285A00A70056E5DF /* Main.storyboard */,
+				C5F7AB10285A04EF0056E5DF /* Beer.swift */,
 				C5F7AB03285A00A90056E5DF /* Assets.xcassets */,
 				C5F7AB05285A00A90056E5DF /* LaunchScreen.storyboard */,
+				C5F7AB14285A0F4A0056E5DF /* seawaves.json */,
+				C5F7AB12285A05710056E5DF /* yellowwave.json */,
 				C5F7AB08285A00A90056E5DF /* Info.plist */,
 			);
 			path = MyBrewery;
@@ -155,9 +157,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C5F7AB15285A0F4A0056E5DF /* seawaves.json in Resources */,
 				C5F7AB07285A00A90056E5DF /* LaunchScreen.storyboard in Resources */,
 				C5F7AB04285A00A90056E5DF /* Assets.xcassets in Resources */,
-				C5F7AB02285A00A70056E5DF /* Main.storyboard in Resources */,
+				C5F7AB13285A05710056E5DF /* yellowwave.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,22 +215,14 @@
 			files = (
 				C5F7AAFF285A00A70056E5DF /* BeerListController.swift in Sources */,
 				C5F7AAFB285A00A70056E5DF /* AppDelegate.swift in Sources */,
+				C5F7AB11285A04EF0056E5DF /* Beer.swift in Sources */,
 				C5F7AAFD285A00A70056E5DF /* SceneDelegate.swift in Sources */,
-				C5F7AB0F285A00CD0056E5DF /* Beer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		C5F7AB00285A00A70056E5DF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				C5F7AB01285A00A70056E5DF /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		C5F7AB05285A00A90056E5DF /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -366,7 +361,6 @@
 				INFOPLIST_FILE = MyBrewery/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -395,7 +389,6 @@
 				INFOPLIST_FILE = MyBrewery/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
