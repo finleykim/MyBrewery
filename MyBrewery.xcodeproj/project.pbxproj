@@ -8,9 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		6EEEC6CBCB7D47E08B4026CB /* Pods_MyBrewery.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2413D97C02C2893C602C29AF /* Pods_MyBrewery.framework */; };
+		C5908A56285B26A4002402B1 /* BeerListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5908A55285B26A4002402B1 /* BeerListCell.swift */; };
 		C5F7AAFB285A00A70056E5DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */; };
 		C5F7AAFD285A00A70056E5DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */; };
-		C5F7AAFF285A00A70056E5DF /* BeerListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFE285A00A70056E5DF /* BeerListController.swift */; };
+		C5F7AAFF285A00A70056E5DF /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFE285A00A70056E5DF /* MainViewController.swift */; };
 		C5F7AB04285A00A90056E5DF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB03285A00A90056E5DF /* Assets.xcassets */; };
 		C5F7AB07285A00A90056E5DF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5F7AB05285A00A90056E5DF /* LaunchScreen.storyboard */; };
 		C5F7AB11285A04EF0056E5DF /* Beer.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AB10285A04EF0056E5DF /* Beer.swift */; };
@@ -22,10 +23,11 @@
 		21CAD3D1DEE8B9CDB764623C /* Pods-MyBrewery.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyBrewery.debug.xcconfig"; path = "Target Support Files/Pods-MyBrewery/Pods-MyBrewery.debug.xcconfig"; sourceTree = "<group>"; };
 		2413D97C02C2893C602C29AF /* Pods_MyBrewery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MyBrewery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C550893A2F914B35BAAB4D42 /* Pods-MyBrewery.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MyBrewery.release.xcconfig"; path = "Target Support Files/Pods-MyBrewery/Pods-MyBrewery.release.xcconfig"; sourceTree = "<group>"; };
+		C5908A55285B26A4002402B1 /* BeerListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListCell.swift; sourceTree = "<group>"; };
 		C5F7AAF7285A00A70056E5DF /* MyBrewery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBrewery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		C5F7AAFE285A00A70056E5DF /* BeerListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListController.swift; sourceTree = "<group>"; };
+		C5F7AAFE285A00A70056E5DF /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		C5F7AB03285A00A90056E5DF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C5F7AB06285A00A90056E5DF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C5F7AB08285A00A90056E5DF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,13 +88,14 @@
 			children = (
 				C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */,
 				C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */,
-				C5F7AAFE285A00A70056E5DF /* BeerListController.swift */,
+				C5F7AAFE285A00A70056E5DF /* MainViewController.swift */,
 				C5F7AB10285A04EF0056E5DF /* Beer.swift */,
 				C5F7AB03285A00A90056E5DF /* Assets.xcassets */,
 				C5F7AB05285A00A90056E5DF /* LaunchScreen.storyboard */,
 				C5F7AB14285A0F4A0056E5DF /* seawaves.json */,
 				C5F7AB12285A05710056E5DF /* yellowwave.json */,
 				C5F7AB08285A00A90056E5DF /* Info.plist */,
+				C5908A55285B26A4002402B1 /* BeerListCell.swift */,
 			);
 			path = MyBrewery;
 			sourceTree = "<group>";
@@ -213,10 +216,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C5F7AAFF285A00A70056E5DF /* BeerListController.swift in Sources */,
+				C5F7AAFF285A00A70056E5DF /* MainViewController.swift in Sources */,
 				C5F7AAFB285A00A70056E5DF /* AppDelegate.swift in Sources */,
 				C5F7AB11285A04EF0056E5DF /* Beer.swift in Sources */,
 				C5F7AAFD285A00A70056E5DF /* SceneDelegate.swift in Sources */,
+				C5908A56285B26A4002402B1 /* BeerListCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

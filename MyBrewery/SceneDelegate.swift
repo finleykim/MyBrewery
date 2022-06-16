@@ -16,11 +16,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = scene as? UIWindowScene else { return }
         self.window = UIWindow(windowScene: windowScene)
         
-        let rootViewController = BeerListController()
-        
+        let rootViewController = MainViewController()
         let rootNavigationController = UINavigationController(rootViewController: rootViewController)
         
         self.window?.rootViewController = rootNavigationController
+        window?.tintColor = .white
         self.window?.makeKeyAndVisible()
     }
 
