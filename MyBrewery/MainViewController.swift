@@ -9,10 +9,15 @@ import UIKit
 import SnapKit
 import Kingfisher
 import Lottie
+import RxSwift
+import RxCocoa
 
 class MainViewController: UIViewController {
     
     
+    let beerList = BehaviorSubject<[Beer]>(value:[])
+    let disposeBag = DisposeBag()
+    var currentPage = 1
     
     let topLogo = UIImageView()
     let searchView = UISearchBar()
@@ -21,18 +26,14 @@ class MainViewController: UIViewController {
     let album = UIButton()
     let beerListTableView = BeerListTableView()
     
-
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         addViewSetup()
         configuration()
-        //backgroundGradient()
+        backgroundGradient()
+        
+        
     }
-    
     
     private func addViewSetup(){
         
@@ -52,10 +53,10 @@ class MainViewController: UIViewController {
         }
         
         camera.snp.makeConstraints{
-             $0.trailing.equalTo(album.snp.leading).offset(sideSpacing)
-             $0.top.equalToSuperview().inset(topSpacing)
-             $0.width.equalTo(buttonWidth)
-             $0.height.equalTo(buttonWidth)
+            $0.trailing.equalTo(album.snp.leading).offset(sideSpacing)
+            $0.top.equalToSuperview().inset(topSpacing)
+            $0.width.equalTo(buttonWidth)
+            $0.height.equalTo(buttonWidth)
         }
         
         album.snp.makeConstraints{
@@ -70,7 +71,7 @@ class MainViewController: UIViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview().inset(20)
         }
-
+        
         topLogo.snp.makeConstraints{
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(50)
@@ -78,7 +79,7 @@ class MainViewController: UIViewController {
     }
     
     private func configuration(){
-        view.backgroundColor = .white 
+        view.backgroundColor = .white
         
         topLogo.image = UIImage(named: "logo")
         
@@ -89,14 +90,27 @@ class MainViewController: UIViewController {
         
         camera.setImage(UIImage(systemName: "camera"), for: .normal)
         album.setImage(UIImage(systemName: "photo"), for: .normal)
-    
+        
         searchView.searchTextField.backgroundColor = UIColor.white
         
         beerListTableView.dataSource = self
         beerListTableView.delegate = self
         beerListTableView.layer.cornerRadius = 10
+        beerListTableView.refreshControl = UIRefreshControl()
+        
+        let refreshControl = beerListTableView.refreshControl!
+        refreshControl.backgroundColor = .clear
+        refreshControl.tintColor = .darkGray
+        refreshControl.attributedTitle = NSAttributedString(string: "reload")
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
     }
     
+    @objc func refresh(){
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
+            self.fetchBeer(of: self.currentPage)
+        }
+    }
     
     private func navigationItemsConfiguration(){
         let searchController = UISearchController()
@@ -112,6 +126,54 @@ class MainViewController: UIViewController {
         //검색결과
     }
     
+    private func fetchBeer(of page: Int){
+        Observable.from([page])
+            .map { page -> URL in
+                return URL(string: "https://api.punkapi.com/v2/beers?page=\(page)")!
+            }
+            .map { url -> URLRequest in
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                return request
+            }
+            .flatMap { request -> Observable<(response: HTTPURLResponse, data: Data)> in
+                return URLSession.shared.rx.response(request: request)
+            }
+            .filter{ responds, _ in
+                return 200..<300 ~= responds.statusCode
+            }
+            .map { _, data -> [[String : Any]] in
+                guard let json = try? JSONSerialization.jsonObject(with: data, options: []),
+                      let result = json as? [[String : Any]] else {
+                    return []
+                }
+                return result
+            }
+            .filter { result in
+                return result.count > 0
+            }
+            .map { objects in
+                return objects.compactMap{ dic -> Beer? in
+                    guard let id = dic["id"] as? Int,
+                          let name = dic["name"] as? String,
+                          let tagline = dic["tagline"] as? String,
+                          let description = dic["description"] as? String,
+                          let brewersTips = dic["brewersTips"] as? String,
+                          let imageURL = dic["imageURL"] as? String,
+                          let foodParing = dic["foodParing"] as? [String] else { return nil }
+                    return Beer(id: id, name: name, tagline: tagline, description: description, brewersTips: brewersTips, imageURL: imageURL, foodParing: foodParing)
+                }
+            }
+            .subscribe(onNext:{ [weak self] newBeer in
+                self?.beerList.onNext(newBeer)
+                self?.currentPage += 1
+                DispatchQueue.main.async{
+                    self?.beerListTableView.reloadData()
+                    self?.beerListTableView.refreshControl?.endRefreshing()
+                }
+            })
+            .disposed(by: disposeBag)
+    }
     
     private func backgroundGradient(){
         let gradient: CAGradientLayer = CAGradientLayer()
@@ -130,20 +192,44 @@ class MainViewController: UIViewController {
 }
 
 
+
 extension MainViewController: UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
         filterContetnForSearchText(searchController.searchBar.text!)
     }
 }
 
+extension MainViewController: UITableViewDataSourcePrefetching{
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard currentPage != 1 else { return }
+        
+        indexPaths.forEach({
+            if ($0.row + 1)/25 + 1 == currentPage{
+                self.fetchBeer(of: currentPage)
+            }
+        })
+    }
+}
+
 extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        do{
+            return try beerList.value().count
+        } catch{
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "BeerListTableViewCell") as? BeerListTableViewCell else { return UITableViewCell() }
-        
+        var currentRepo: Beer?{
+            do{
+                return try beerList.value()[indexPath.row]
+            } catch{
+                return nil
+            }
+        }
+        cell.beer = currentRepo
         return cell
     }
 }

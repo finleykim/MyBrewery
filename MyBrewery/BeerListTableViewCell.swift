@@ -24,6 +24,18 @@ class BeerListTableViewCell: UITableViewCell{
             contentView.addSubview($0)
         }
         
+        guard let beer = beer else { return }
+        
+        let imageURL = URL(string: beer.imageURL ?? "")
+        beerImageView.kf.setImage(with: imageURL, placeholder: #imageLiteral(resourceName: "beer_icon"))
+
+        nameLabel.text = beer.name ?? "NoName"
+        nameLabel.font = .systemFont(ofSize: 13, weight: .bold)
+
+        taglineLabel.text = beer.tagline
+        taglineLabel.backgroundColor = UIColor(red: 255/255, green: 246/255, blue: 132/255, alpha: 0.8)
+        taglineLabel.font = .systemFont(ofSize: 10, weight: .regular)
+        
         beerImageView.snp.makeConstraints{
             $0.centerY.equalToSuperview()
             $0.leading.bottom.equalToSuperview().inset(20)
@@ -62,18 +74,5 @@ class BeerListTableViewCell: UITableViewCell{
     
     
     
-    func configuration(with beer: Beer){
-        let imageURL = URL(string: beer.imageURL ?? "")
-        beerImageView.kf.setImage(with: imageURL, placeholder: #imageLiteral(resourceName: "beer_icon"))
 
-        nameLabel.text = beer.name ?? "NoName"
-        nameLabel.font = .systemFont(ofSize: 13, weight: .bold)
-
-        taglineLabel.text = beer.tagline
-        taglineLabel.backgroundColor = UIColor(red: 255/255, green: 246/255, blue: 132/255, alpha: 0.8)
-        taglineLabel.font = .systemFont(ofSize: 10, weight: .regular)
-
-        accessoryType = .disclosureIndicator
-        selectionStyle = .none
-    }
 }
