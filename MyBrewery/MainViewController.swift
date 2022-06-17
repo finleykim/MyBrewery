@@ -14,11 +14,12 @@ class MainViewController: UIViewController {
     
     
     
-    
+    let topLogo = UIImageView()
     let searchView = UISearchBar()
-    let animationView = AnimationView(name: "seawaves")
+    let animationView = AnimationView(name: "yellowwave")
     let camera = UIButton()
     let album = UIButton()
+    let beerListTableView = BeerListTableView()
     
 
     
@@ -29,8 +30,9 @@ class MainViewController: UIViewController {
         
         addViewSetup()
         configuration()
-        backgroundGradient()
+        //backgroundGradient()
     }
+    
     
     private func addViewSetup(){
         
@@ -40,12 +42,12 @@ class MainViewController: UIViewController {
         let sideSpacing : CGFloat = -10
         let topSpacing: CGFloat = 30
         
-        [animationView,camera,album,searchView].forEach{
+        [animationView,camera,album,beerListTableView,topLogo].forEach{
             view.addSubview($0)
         }
         
         animationView.snp.makeConstraints{
-            $0.bottom.equalToSuperview().inset(-300)
+            $0.top.equalToSuperview().inset(-450)
             $0.leading.trailing.equalToSuperview()
         }
         
@@ -63,23 +65,36 @@ class MainViewController: UIViewController {
             $0.height.equalTo(buttonWidth)
         }
         
-        searchView.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(topSpacing)
-            $0.trailing.equalTo(camera.snp.leading).offset(sideSpacing)
-            $0.leading.equalToSuperview().inset(10)
+        beerListTableView.snp.makeConstraints{
+            $0.top.equalTo(topLogo.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview().inset(20)
         }
 
+        topLogo.snp.makeConstraints{
+            $0.centerX.equalToSuperview()
+            $0.top.equalToSuperview().inset(50)
+        }
     }
     
     private func configuration(){
+        view.backgroundColor = .white 
+        
+        topLogo.image = UIImage(named: "logo")
+        
         animationView.loopMode = .loop
         animationView.play()
         animationView.backgroundBehavior = .pauseAndRestore
+        animationView.transform = CGAffineTransform.init(rotationAngle: -CGFloat.pi)
         
         camera.setImage(UIImage(systemName: "camera"), for: .normal)
         album.setImage(UIImage(systemName: "photo"), for: .normal)
     
         searchView.searchTextField.backgroundColor = UIColor.white
+        
+        beerListTableView.dataSource = self
+        beerListTableView.delegate = self
+        beerListTableView.layer.cornerRadius = 10
     }
     
     
@@ -118,5 +133,17 @@ class MainViewController: UIViewController {
 extension MainViewController: UISearchResultsUpdating{
     func updateSearchResults(for searchController: UISearchController) {
         filterContetnForSearchText(searchController.searchBar.text!)
+    }
+}
+
+extension MainViewController: UITableViewDelegate, UITableViewDataSource{
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 20
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "BeerListTableViewCell") as? BeerListTableViewCell else { return UITableViewCell() }
+        
+        return cell
     }
 }
