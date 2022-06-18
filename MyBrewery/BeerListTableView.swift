@@ -14,6 +14,7 @@ class BeerListTableView: UITableView{
         super.init(frame: .zero, style: .plain)
         self.register(BeerListTableViewCell.self, forCellReuseIdentifier: "BeerListTableViewCell")
         self.rowHeight = 100
+        
     }
     
     required init?(coder: NSCoder) {

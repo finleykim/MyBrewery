@@ -11,6 +11,7 @@ import Kingfisher
 import Lottie
 import RxSwift
 import RxCocoa
+import SwiftUI
 
 class MainViewController: UIViewController {
     
@@ -76,7 +77,7 @@ class MainViewController: UIViewController {
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview().inset(50)
         }
-    }
+    } 
     
     private func configuration(){
         view.backgroundColor = .white
@@ -126,7 +127,7 @@ class MainViewController: UIViewController {
         //검색결과
     }
     
-    private func fetchBeer(of page: Int){
+     func fetchBeer(of page: Int){
         Observable.from([page])
             .map { page -> URL in
                 return URL(string: "https://api.punkapi.com/v2/beers?page=\(page)")!
@@ -136,7 +137,7 @@ class MainViewController: UIViewController {
                 request.httpMethod = "GET"
                 return request
             }
-            .flatMap { request -> Observable<(response: HTTPURLResponse, data: Data)> in
+            .flatMap{ request -> Observable<(response: HTTPURLResponse, data: Data)> in
                 return URLSession.shared.rx.response(request: request)
             }
             .filter{ responds, _ in
@@ -147,20 +148,24 @@ class MainViewController: UIViewController {
                       let result = json as? [[String : Any]] else {
                     return []
                 }
+                
                 return result
             }
             .filter { result in
+
                 return result.count > 0
             }
             .map { objects in
-                return objects.compactMap{ dic -> Beer? in
+                return objects.compactMap { dic -> Beer? in
                     guard let id = dic["id"] as? Int,
                           let name = dic["name"] as? String,
                           let tagline = dic["tagline"] as? String,
                           let description = dic["description"] as? String,
-                          let brewersTips = dic["brewersTips"] as? String,
-                          let imageURL = dic["imageURL"] as? String,
-                          let foodParing = dic["foodParing"] as? [String] else { return nil }
+                          let brewersTips = dic["brewers_tips"] as? String,
+                          let imageURL = dic["image_url"] as? String,
+                          let foodParing = dic["food_pairing"] as? [String] else {
+                        return nil
+                    }
                     return Beer(id: id, name: name, tagline: tagline, description: description, brewersTips: brewersTips, imageURL: imageURL, foodParing: foodParing)
                 }
             }
@@ -213,9 +218,9 @@ extension MainViewController: UITableViewDataSourcePrefetching{
 
 extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        do{
+        do {
             return try beerList.value().count
-        } catch{
+        } catch {
             return 0
         }
     }
@@ -230,6 +235,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
             }
         }
         cell.beer = currentRepo
+        cell.contentView.backgroundColor = .red
         return cell
     }
+    
+    
 }

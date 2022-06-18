@@ -19,6 +19,7 @@ class BeerListTableViewCell: UITableViewCell{
     
     override func layoutSubviews() {
         
+        
         //addSubview, autoLayout
         [beerImageView,nameLabel,taglineLabel].forEach{
             contentView.addSubview($0)
@@ -35,6 +36,8 @@ class BeerListTableViewCell: UITableViewCell{
         taglineLabel.text = beer.tagline
         taglineLabel.backgroundColor = UIColor(red: 255/255, green: 246/255, blue: 132/255, alpha: 0.8)
         taglineLabel.font = .systemFont(ofSize: 10, weight: .regular)
+        
+        
         
         beerImageView.snp.makeConstraints{
             $0.centerY.equalToSuperview()
