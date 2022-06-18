@@ -23,81 +23,58 @@ class MainViewController: UIViewController {
     let topLogo = UIImageView()
     let searchView = UISearchBar()
     let animationView = AnimationView(name: "yellowwave")
-    let camera = UIButton()
-    let album = UIButton()
+    let cameraButton = UIButton()
     let beerListTableView = BeerListTableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         addViewSetup()
         configuration()
-        backgroundGradient()
-        
-        
+        fetchBeer(of: self.currentPage)
     }
     
     private func addViewSetup(){
         
-        //commonSet
-        let buttonWidth: CGFloat = 30
-        let buttonInset: CGFloat = 16.0
-        let sideSpacing : CGFloat = -10
-        let topSpacing: CGFloat = 30
-        
-        [animationView,camera,album,beerListTableView,topLogo].forEach{
+        [beerListTableView,topLogo,cameraButton].forEach{
             view.addSubview($0)
-        }
-        
-        animationView.snp.makeConstraints{
-            $0.top.equalToSuperview().inset(-450)
-            $0.leading.trailing.equalToSuperview()
-        }
-        
-        camera.snp.makeConstraints{
-            $0.trailing.equalTo(album.snp.leading).offset(sideSpacing)
-            $0.top.equalToSuperview().inset(topSpacing)
-            $0.width.equalTo(buttonWidth)
-            $0.height.equalTo(buttonWidth)
-        }
-        
-        album.snp.makeConstraints{
-            $0.trailing.equalToSuperview().inset(buttonInset)
-            $0.top.equalToSuperview().inset(topSpacing)
-            $0.width.equalTo(buttonWidth)
-            $0.height.equalTo(buttonWidth)
-        }
-        
-        beerListTableView.snp.makeConstraints{
-            $0.top.equalTo(topLogo.snp.bottom).offset(10)
-            $0.leading.trailing.equalToSuperview().inset(20)
-            $0.bottom.equalToSuperview().inset(20)
         }
         
         topLogo.snp.makeConstraints{
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview().inset(50)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
         }
+        
+        beerListTableView.snp.makeConstraints{
+            $0.top.equalTo(topLogo.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        cameraButton.snp.makeConstraints{
+            $0.trailing.equalToSuperview().inset(10)
+            $0.bottom.equalToSuperview().inset(10)
+            $0.height.equalTo(80)
+            $0.width.equalTo(80)
+        }
+
     } 
     
     private func configuration(){
-        view.backgroundColor = .white
+        view.backgroundColor = .black
         
         topLogo.image = UIImage(named: "logo")
-        
-        animationView.loopMode = .loop
-        animationView.play()
-        animationView.backgroundBehavior = .pauseAndRestore
-        animationView.transform = CGAffineTransform.init(rotationAngle: -CGFloat.pi)
-        
-        camera.setImage(UIImage(systemName: "camera"), for: .normal)
-        album.setImage(UIImage(systemName: "photo"), for: .normal)
         
         searchView.searchTextField.backgroundColor = UIColor.white
         
         beerListTableView.dataSource = self
         beerListTableView.delegate = self
-        beerListTableView.layer.cornerRadius = 10
+        beerListTableView.backgroundColor = .white
         beerListTableView.refreshControl = UIRefreshControl()
+        
+        cameraButton.backgroundColor = .black
+        cameraButton.tintColor = .white
+        cameraButton.setImage(UIImage(systemName: "camera"), for: .normal)
+        cameraButton.layer.cornerRadius = 40
         
         let refreshControl = beerListTableView.refreshControl!
         refreshControl.backgroundColor = .clear
@@ -179,21 +156,7 @@ class MainViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
-    
-    private func backgroundGradient(){
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.colors = [UIColor(red: 139/255, green: 152/255, blue: 206/255, alpha: 1).cgColor,
-                           UIColor(red: 255/255, green: 180/255, blue: 180/255, alpha: 1).cgColor,
-                           UIColor(red: 255/255, green: 165/255, blue: 121/255, alpha: 1).cgColor,
-                           UIColor(red: 255/255, green: 59/255, blue: 59/255, alpha: 1).cgColor]
-        gradient.locations = [0.0, 0.3 ,0.7]
-        gradient.startPoint = CGPoint(x: 0, y: 0)
-        gradient.endPoint = CGPoint(x: 0, y: 1)
-        gradient.frame = CGRect(x: 0.0, y: 0.0, width: self.view.frame.size.width, height: self.view.frame.size.height)
-        self.view.layer.insertSublayer(gradient,at: 0)
-        
-    }
-    
+
 }
 
 
@@ -235,9 +198,20 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
             }
         }
         cell.beer = currentRepo
-        cell.contentView.backgroundColor = .red
         return cell
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+
+        do{
+            let selectedBeer = try beerList.value()[indexPath.row]
+            let detailViewController = DetailViewController()
+            detailViewController.beer = selectedBeer
+            self.show(detailViewController, sender: nil)
+        } catch{
+            print("알 수 없는 오류")
+        }
+    }
     
 }

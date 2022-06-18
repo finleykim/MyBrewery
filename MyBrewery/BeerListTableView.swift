@@ -13,7 +13,7 @@ class BeerListTableView: UITableView{
     override init(frame: CGRect, style: UITableView.Style) {
         super.init(frame: .zero, style: .plain)
         self.register(BeerListTableViewCell.self, forCellReuseIdentifier: "BeerListTableViewCell")
-        self.rowHeight = 100
+        self.rowHeight = 150
         
     }
     

@@ -19,25 +19,10 @@ class BeerListTableViewCell: UITableViewCell{
     
     override func layoutSubviews() {
         
-        
         //addSubview, autoLayout
         [beerImageView,nameLabel,taglineLabel].forEach{
             contentView.addSubview($0)
         }
-        
-        guard let beer = beer else { return }
-        
-        let imageURL = URL(string: beer.imageURL ?? "")
-        beerImageView.kf.setImage(with: imageURL, placeholder: #imageLiteral(resourceName: "beer_icon"))
-
-        nameLabel.text = beer.name ?? "NoName"
-        nameLabel.font = .systemFont(ofSize: 13, weight: .bold)
-
-        taglineLabel.text = beer.tagline
-        taglineLabel.backgroundColor = UIColor(red: 255/255, green: 246/255, blue: 132/255, alpha: 0.8)
-        taglineLabel.font = .systemFont(ofSize: 10, weight: .regular)
-        
-        
         
         beerImageView.snp.makeConstraints{
             $0.centerY.equalToSuperview()
@@ -56,26 +41,30 @@ class BeerListTableViewCell: UITableViewCell{
             $0.leading.trailing.equalTo(nameLabel)
             $0.top.equalTo(nameLabel.snp.bottom).offset(5)
         }
+        
+        cofiguration()
     }
     
-  
-//    private func configuration(){
-//        beerImageView.image = UIImage(named: "beer_icon")
-//
-//        nameLabel.text = "이름없는맥주"
-//        nameLabel.font = .systemFont(ofSize: 13, weight: .bold)
-//        nameLabel.textColor = .black
-//
-//        taglineLabel.text = "taglineLabel"
-//        taglineLabel.backgroundColor = UIColor(red: 255/255, green: 246/255, blue: 132/255, alpha: 0.8)
-//        taglineLabel.font = .systemFont(ofSize: 10, weight: .regular)
-//        taglineLabel.textColor = .black
-//
-//        accessoryType = .disclosureIndicator
-//        selectionStyle = .none
-//    }
-    
-    
+
+    func cofiguration(){
+        guard let beer = beer else { return }
+        
+        let imageURL = URL(string: beer.imageURL)
+        beerImageView.contentMode = .scaleAspectFit
+        beerImageView.kf.setImage(with: imageURL, placeholder: #imageLiteral(resourceName: "beer_icon"))
+
+        nameLabel.text = beer.name
+        nameLabel.font = .systemFont(ofSize: 18, weight: .bold)
+        nameLabel.textColor = .black
+        nameLabel.numberOfLines = 2
+
+        taglineLabel.text = beer.tagline
+        taglineLabel.backgroundColor = .darkGray
+        taglineLabel.font = .systemFont(ofSize: 14, weight: .light)
+        
+        accessoryType = .disclosureIndicator
+        selectionStyle = .none
+    }
     
 
 }
