@@ -17,6 +17,7 @@ class MainViewController: UIViewController {
     
     
     let beerList = BehaviorSubject<[Beer]>(value:[])
+    var filterBeerList = BehaviorSubject<[Beer]>(value:[])
     let disposeBag = DisposeBag()
     var currentPage = 1
     
@@ -25,6 +26,7 @@ class MainViewController: UIViewController {
     let animationView = AnimationView(name: "yellowwave")
     let cameraButton = UIButton()
     let beerListTableView = BeerListTableView()
+    let searchTableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,8 +58,11 @@ class MainViewController: UIViewController {
             $0.height.equalTo(80)
             $0.width.equalTo(80)
         }
-
-    } 
+        
+        searchTableView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
+    }
     
     private func configuration(){
         view.backgroundColor = .black
@@ -81,6 +86,11 @@ class MainViewController: UIViewController {
         refreshControl.tintColor = .darkGray
         refreshControl.attributedTitle = NSAttributedString(string: "reload")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        searchTableView.register(UITableViewCell.self, forCellReuseIdentifier: "BeerListTableViewCell")
+        searchTableView.delegate = self
+        searchTableView.dataSource = self
+        searchTableView.isHidden = true
     }
     
     @objc func refresh(){
@@ -104,7 +114,7 @@ class MainViewController: UIViewController {
         //검색결과
     }
     
-     func fetchBeer(of page: Int){
+    func fetchBeer(of page: Int){
         Observable.from([page])
             .map { page -> URL in
                 return URL(string: "https://api.punkapi.com/v2/beers?page=\(page)")!
@@ -129,7 +139,7 @@ class MainViewController: UIViewController {
                 return result
             }
             .filter { result in
-
+                
                 return result.count > 0
             }
             .map { objects in
@@ -156,7 +166,11 @@ class MainViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
-
+    
+    func searchFetch(){
+        //MARK: 서치 필터링 옵저버블 따로만들꺼임
+    }
+    
 }
 
 
@@ -170,7 +184,6 @@ extension MainViewController: UISearchResultsUpdating{
 extension MainViewController: UITableViewDataSourcePrefetching{
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         guard currentPage != 1 else { return }
-        
         indexPaths.forEach({
             if ($0.row + 1)/25 + 1 == currentPage{
                 self.fetchBeer(of: currentPage)
@@ -203,7 +216,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-
+        
         do{
             let selectedBeer = try beerList.value()[indexPath.row]
             let detailViewController = DetailViewController()
