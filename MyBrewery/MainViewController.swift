@@ -22,11 +22,11 @@ class MainViewController: UIViewController {
     var currentPage = 1
     
     let topLogo = UIImageView()
-    let searchView = UISearchBar()
+    let searchBar = UISearchBar()
     let animationView = AnimationView(name: "yellowwave")
     let cameraButton = UIButton()
     let beerListTableView = BeerListTableView()
-    let searchTableView = UITableView()
+//    let searchTableView = UITableView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,13 +37,18 @@ class MainViewController: UIViewController {
     
     private func addViewSetup(){
         
-        [beerListTableView,topLogo,cameraButton].forEach{
+        [topLogo,searchBar,beerListTableView,cameraButton].forEach{
             view.addSubview($0)
         }
         
         topLogo.snp.makeConstraints{
             $0.centerX.equalToSuperview()
             $0.top.equalTo(view.safeAreaLayoutGuide)
+        }
+        
+        searchBar.snp.makeConstraints{
+            $0.top.equalTo(topLogo.snp.bottom).offset(10)
+            $0.leading.trailing.equalToSuperview()
         }
         
         beerListTableView.snp.makeConstraints{
@@ -59,9 +64,9 @@ class MainViewController: UIViewController {
             $0.width.equalTo(80)
         }
         
-        searchTableView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
-        }
+//        searchTableView.snp.makeConstraints{
+//            $0.edges.equalToSuperview()
+//        }
     }
     
     private func configuration(){
@@ -69,7 +74,7 @@ class MainViewController: UIViewController {
         
         topLogo.image = UIImage(named: "logo")
         
-        searchView.searchTextField.backgroundColor = UIColor.white
+        searchBar.searchTextField.backgroundColor = UIColor.white
         
         beerListTableView.dataSource = self
         beerListTableView.delegate = self
@@ -87,10 +92,10 @@ class MainViewController: UIViewController {
         refreshControl.attributedTitle = NSAttributedString(string: "reload")
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
-        searchTableView.register(UITableViewCell.self, forCellReuseIdentifier: "BeerListTableViewCell")
-        searchTableView.delegate = self
-        searchTableView.dataSource = self
-        searchTableView.isHidden = true
+//        searchTableView.register(UITableViewCell.self, forCellReuseIdentifier: "BeerListTableViewCell")
+//        searchTableView.delegate = self
+//        searchTableView.dataSource = self
+//        searchTableView.isHidden = true
     }
     
     @objc func refresh(){
@@ -111,7 +116,54 @@ class MainViewController: UIViewController {
     }
     
     private func filterContetnForSearchText(_ searchText: String){
-        //검색결과
+        Observable.from([searchText])
+            .map { page -> URL in
+                return URL(string: "https://api.punkapi.com/v2/beers?page=\(searchText)")!
+            }
+            .map { url -> URLRequest in
+                var request = URLRequest(url: url)
+                request.httpMethod = "GET"
+                return request
+            }
+            .flatMap{ request -> Observable<(response: HTTPURLResponse, data: Data)> in
+                return URLSession.shared.rx.response(request: request)
+            }
+            .filter{ responds, _ in
+                return 200..<300 ~= responds.statusCode
+            }
+            .map { _, data -> [[String : Any]] in
+                guard let json = try? JSONSerialization.jsonObject(with: data, options: []),
+                      let result = json as? [[String : Any]] else {
+                    return []
+                }
+                
+                return result
+            }
+            .filter { result in
+                
+                return result.count > 0
+            }
+            .map { objects in
+                return objects.compactMap { dic -> Beer? in
+                    guard let id = dic["id"] as? Int,
+                          let name = dic["name"] as? String,
+                          let tagline = dic["tagline"] as? String,
+                          let description = dic["description"] as? String,
+                          let brewersTips = dic["brewers_tips"] as? String,
+                          let imageURL = dic["image_url"] as? String,
+                          let foodParing = dic["food_pairing"] as? [String] else {
+                        return nil
+                    }
+                    return Beer(id: id, name: name, tagline: tagline, description: description, brewersTips: brewersTips, imageURL: imageURL, foodParing: foodParing)
+                }
+            }
+            .subscribe(onNext:{ [weak self] searchBeer in
+                self?.beerList.onNext(searchBeer)
+                DispatchQueue.main.async{
+                    self?.beerListTableView.reloadData()
+                }
+            })
+            .disposed(by: disposeBag)
     }
     
     func fetchBeer(of page: Int){
@@ -166,20 +218,11 @@ class MainViewController: UIViewController {
             })
             .disposed(by: disposeBag)
     }
-    
-    func searchFetch(){
-        //MARK: 서치 필터링 옵저버블 따로만들꺼임
-    }
-    
+
 }
 
 
 
-extension MainViewController: UISearchResultsUpdating{
-    func updateSearchResults(for searchController: UISearchController) {
-        filterContetnForSearchText(searchController.searchBar.text!)
-    }
-}
 
 extension MainViewController: UITableViewDataSourcePrefetching{
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
@@ -227,4 +270,10 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource{
         }
     }
     
+}
+
+extension MainViewController: UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContetnForSearchText(searchController.searchBar.text!)
+    }
 }

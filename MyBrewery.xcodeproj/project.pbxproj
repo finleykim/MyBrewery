@@ -11,6 +11,7 @@
 		C55A4016285E057800995475 /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C55A4015285E057800995475 /* DetailViewController.swift */; };
 		C5908A56285B26A4002402B1 /* BeerListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5908A55285B26A4002402B1 /* BeerListTableViewCell.swift */; };
 		C5AEA701285C52F000D2E2DE /* BeerListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5AEA700285C52F000D2E2DE /* BeerListTableView.swift */; };
+		C5CC209328616FD000B5AE95 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CC209228616FD000B5AE95 /* SearchBar.swift */; };
 		C5F7AAFB285A00A70056E5DF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */; };
 		C5F7AAFD285A00A70056E5DF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */; };
 		C5F7AAFF285A00A70056E5DF /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5F7AAFE285A00A70056E5DF /* MainViewController.swift */; };
@@ -28,6 +29,7 @@
 		C55A4015285E057800995475 /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		C5908A55285B26A4002402B1 /* BeerListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListTableViewCell.swift; sourceTree = "<group>"; };
 		C5AEA700285C52F000D2E2DE /* BeerListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BeerListTableView.swift; sourceTree = "<group>"; };
+		C5CC209228616FD000B5AE95 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		C5F7AAF7285A00A70056E5DF /* MyBrewery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyBrewery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5F7AAFA285A00A70056E5DF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5F7AAFC285A00A70056E5DF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				C5908A55285B26A4002402B1 /* BeerListTableViewCell.swift */,
 				C5AEA700285C52F000D2E2DE /* BeerListTableView.swift */,
 				C5F7AB10285A04EF0056E5DF /* Beer.swift */,
+				C5CC209228616FD000B5AE95 /* SearchBar.swift */,
 			);
 			path = MyBrewery;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				C5F7AAFB285A00A70056E5DF /* AppDelegate.swift in Sources */,
 				C5F7AB11285A04EF0056E5DF /* Beer.swift in Sources */,
 				C5F7AAFD285A00A70056E5DF /* SceneDelegate.swift in Sources */,
+				C5CC209328616FD000B5AE95 /* SearchBar.swift in Sources */,
 				C5908A56285B26A4002402B1 /* BeerListTableViewCell.swift in Sources */,
 				C55A4016285E057800995475 /* DetailViewController.swift in Sources */,
 			);
